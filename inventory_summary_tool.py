@@ -2,7 +2,7 @@ import csv
 
 # Input
 products = [
-    {"name": "Apples", "qty": 10, "price": 1.5},
+    {"name": "Apples", "qty": 12, "price": 1.5},
     {"name": "Bananas", "qty": 2, "price": 0.5},
     {"name": "Oranges", "qty": 0, "price": 0.8},
 ]
@@ -24,3 +24,4 @@ with open("inventory_summary.csv", "w", newline="") as f:
     writer.writerow(["Name", "Quantity", "Price per Unit"])
     for p in products:
         writer.writerow([p["name"], p["qty"], p["price"]])
+ 
