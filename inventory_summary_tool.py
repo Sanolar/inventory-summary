@@ -17,11 +17,3 @@ print(f"Total Inventory Value: ${total_value:.2f}")
 print("Low Stock Items:")
 for p in low_stock:
     print(f"- {p['name']} (Qty: {p['qty']})")
-
-# Bonus: Save to CSV
-with open("inventory_summary.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Name", "Quantity", "Price per Unit"])
-    for p in products:
-        writer.writerow([p["name"], p["qty"], p["price"]])
- 
