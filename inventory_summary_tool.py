@@ -81,7 +81,7 @@ def record_sale():
         for name, qty_sold, total_price in sale_items:
             writer.writerow([datetime.now().isoformat(), name, qty_sold, total_price])
 
-    print(f"\n🧾 Total Sale: ${sale_total:.2f}")
+    print(f"\n🧾 Total Sale: ${sale_total:.2f}")1
 
 def display_inventory():
     products = load_inventory()
