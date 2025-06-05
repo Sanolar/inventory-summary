@@ -1,11 +1,11 @@
-# 🧮 Inventory Summary Tool
+# Inventory Summary Tool
 
 An interactive command-line inventory management system built with Python.  
 This tool allows you to add or update products, record sales, view real-time inventory, and automatically highlight low-stock items. All data is saved in CSV files and easily pushed to GitHub.
 
 ---
 
-## 📦 Features
+## Features
 
 - Add new products or update existing ones (quantity & price)
 - Record sales with automatic stock deduction
@@ -13,13 +13,13 @@ This tool allows you to add or update products, record sales, view real-time inv
 - View inventory with:
   - Current stock
   - Total inventory value
-  - 🔴 Highlighted low-stock items
+  - Highlighted low-stock items
 - Styled terminal output
 - Data persistence via CSV files
 
 ---
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 
