@@ -189,8 +189,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     print("args.api =", args.api)
-if args.api:
-    print("✅ Starting Flask API...")
-    app.run(debug=True)
-else:
-    main_menu()
+    if args.api:
+        print("✅ Starting Flask API...")
+        app.run(debug=True)
+    else:
+        main_menu()
