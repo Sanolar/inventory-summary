@@ -8,7 +8,6 @@ INVENTORY_FILE = "inventory.csv"
 SALES_FILE = "sales.csv"
 LOW_STOCK_THRESHOLD = 5
 
-# Flask app for API mode
 app = Flask(__name__)
 
 def ensure_files_exist():
@@ -125,7 +124,6 @@ def main_menu():
         else:
             print("❌ Invalid choice. Try again.")
 
-# === API Endpoints ===
 @app.route("/inventory-summary", methods=["GET"])
 def api_get_inventory():
     inventory = load_inventory()
@@ -181,7 +179,6 @@ def api_sell_product():
 
     return jsonify({"message": "Sale recorded", "total": total_sale})
 
-# === Entry Point ===
 if __name__ == "__main__":
     ensure_files_exist()
     parser = argparse.ArgumentParser()
