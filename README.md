@@ -1,65 +1,121 @@
 # 🧮 Inventory Summary Tool
 
-A user-friendly command-line tool to manage your product inventory with interactive features and CSV tracking.
+This is a command-line + API tool that helps you manage a basic inventory of products and record sales.
 
 ---
 
-## ✅ Features
+## 📦 What It Does
 
-- 🛠 **Modify Inventory:** Add new products or update quantities and prices
-- 🧾 **Record Sales:** Accept multiple product sales in one session and update stock
-- 📦 **Inventory Status:** Display inventory list with color-highlighted low-stock warnings
-- 💾 **Data Persistence:** Inventory and sales are saved in CSV files (`inventory.csv`, `sales.csv`)
-- 🎨 **Interactive Terminal:** Emoji-enhanced prompts and styled output
+- Add or update products (CLI or API)
+- View inventory and total stock value
+- Highlights products with low stock (less than 5)
+- Record product sales and update inventory
+- Export inventory and sales to CSV files
+- Use as an interactive CLI or REST API
 
 ---
 
-## 🚀 How to Run
+## 🛠 How to Run
 
-1. Make sure Python 3 is installed
-2. Clone this repository:
-
-```bash
-git clone https://github.com/Sanolar/inventory-summary.git
-cd inventory-summary
-```
-
-3. Run the tool:
+### ▶️ CLI Mode
 
 ```bash
 python3 inventory_summary_tool.py
 ```
 
+### 🌐 API Mode (Flask)
+
+```bash
+python3 inventory_summary_tool.py --api
+```
+
+Open your browser or Postman to test endpoints.
+
 ---
 
-## 📂 Files Created
+## 🔗 API Endpoints
 
-- `inventory.csv`: Stores current inventory (name, quantity, price)
-- `sales.csv`: Logs product sales (date, name, qty, total price)
+### 📥 Add Product
 
----
+`POST /inventory-summary/add`
 
-## 📸 Sample Terminal Output
-
-```
-📊 === INVENTORY TOOL MENU ===
-1️⃣  Modify Inventory (Add/Update)
-2️⃣  Record a Sale
-3️⃣  View Inventory Status
-4️⃣  Exit
-```
-
-```
-📦 INVENTORY STATUS
-Product         Quantity   Price     
--------------------------------
-Apples          10         $0.50      
-Bananas         2          $0.30      🔴 LOW
-
-💰 Total Inventory Value: $6.10
+**Body (JSON):**
+```json
+{ "name": "Apple", "qty": 10, "price": 0.75 }
 ```
 
 ---
+
+### 📦 View Inventory
+
+`GET /inventory-summary`
+
+Returns JSON array of inventory items.
+
+---
+
+### 🛒 Record Sale
+
+`POST /inventory-summary/sell`
+
+**Body (JSON):**
+```json
+{
+  "items": [
+    { "name": "Apple", "qty": 2 },
+    { "name": "Orange", "qty": 1 }
+  ]
+}
+```
+
+---
+
+### ❌ Delete Product
+
+`DELETE /inventory-summary/delete/<name>`
+
+Example:
+```
+DELETE /inventory-summary/delete/Apple
+```
+
+---
+
+### 📊 Inventory Summary
+
+`GET /inventory-summary/summary`
+
+Returns:
+```json
+{
+  "total_inventory_value": 250.0,
+  "low_stock_items": 2,
+  "total_products": 5
+}
+```
+
+---
+
+### 🧾 Sales Report
+
+`GET /sales-report`
+
+Returns array of all sales from `sales.csv`.
+
+---
+
+## 📁 File Structure
+
+- `inventory_summary_tool.py` – Main tool file
+- `inventory.csv` – Inventory data
+- `sales.csv` – Sales records
+
+---
+
+## 💡 Tips
+
+- Use Postman or your browser to test the GET endpoints.
+- Use `raw JSON` in Postman when sending POST/DELETE requests.
 
 ## 👨‍💻 Author
 
