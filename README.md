@@ -1,12 +1,21 @@
-# Inventory Summary Tool
+# 🧮 Inventory Summary Tool
 
-This tool reads product data from a CSV file, calculates the total inventory value,
-and highlights low-stock items (e.g., quantity < 5).
+A Python tool that reads a product list from CSV, calculates the total inventory value, and highlights low-stock items.
 
-## How to Run
+---
 
-1. Make sure `inventory.csv` is in the same folder as the script.
-2. Run the program:
+## ✅ Features
 
-```bash
-python3 inventory_summary_tool.py
+- Reads inventory from `inventory.csv`
+- Calculates total inventory value
+- Highlights products with low stock (quantity < 5)
+- Displays a clean, tabular view in the terminal
+
+---
+
+## 🛠 How to Run
+
+1. Make sure you have Python installed.
+2. Clone the repo or download the files.
+3. Make sure your `inventory.csv` looks like this:
+
