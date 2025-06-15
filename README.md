@@ -6,10 +6,11 @@ A Python tool that reads a product list from CSV, calculates the total inventory
 
 ## ✅ Features
 
-- Reads inventory from `inventory.csv`
-- Calculates total inventory value
-- Highlights products with low stock (quantity < 5)
-- Displays a clean, tabular view in the terminal
+- Reads inventory from `inventory.csv`.
+- **Modify Inventory**: Add new products or update quantity/price of existing ones.
+- **Record Sales**: Process single or multiple product sales, calculate totals, and automatically update inventory.
+- **View Inventory Status**: Display the current stock, with clear visual cues for low-stock items (e.g., quantity < 5) in a tabular view in the terminal.
+
 
 ---
 
