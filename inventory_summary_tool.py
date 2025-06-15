@@ -1,47 +1,118 @@
 import csv
 
-CSV_FILE = 'inventory.csv'
+CSV_FILE = "inventory.csv"
 LOW_STOCK_THRESHOLD = 5
 
+
 def load_inventory():
-    inventory = []
-    with open(CSV_FILE, mode='r') as file:
+    with open(CSV_FILE, mode="r") as file:
         reader = csv.DictReader(file)
-        for row in reader:
-            inventory.append({
+        return [
+            {
                 "name": row["Product Name"],
                 "quantity": int(row["Quantity"]),
-                "price": float(row["Price Per Unit"])
+                "price": float(row["Price Per Unit"]),
+            }
+            for row in reader
+        ]
+
+
+def save_inventory(inventory):
+    with open(CSV_FILE, mode="w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=["Product Name", "Quantity", "Price Per Unit"])
+        writer.writeheader()
+        for item in inventory:
+            writer.writerow({
+                "Product Name": item["name"],
+                "Quantity": item["quantity"],
+                "Price Per Unit": item["price"]
             })
-    return inventory
 
-def calculate_total_value(inventory):
-    return sum(item['quantity'] * item['price'] for item in inventory)
-
-def get_low_stock_items(inventory):
-    return [item for item in inventory if item['quantity'] < LOW_STOCK_THRESHOLD]
 
 def display_inventory(inventory):
-    print(f"\n{'Product':<15} {'Qty':<5} {'Price':<8}")
-    print("-" * 30)
+    print("\n📦 Current Inventory:")
+    print(f"{'Product':<15} {'Qty':<5} {'Price':<8}")
+    print("-" * 32)
     for item in inventory:
-        print(f"{item['name']:<15} {item['quantity']:<5} ${item['price']:<8.2f}")
-    print("-" * 30)
+        low_flag = "⚠️ " if item["quantity"] < LOW_STOCK_THRESHOLD else "✅"
+        print(f"{low_flag} {item['name']:<13} {item['quantity']:<5} ${item['price']:<.2f}")
+    print("-" * 32)
+
+
+def modify_inventory(inventory):
+    name = input("Enter product name to add/update: ").strip()
+    for item in inventory:
+        if item["name"].lower() == name.lower():
+            quantity = int(input(f"Current qty: {item['quantity']}. Enter new quantity: "))
+            price = float(input(f"Current price: ${item['price']}. Enter new price: "))
+            item["quantity"] = quantity
+            item["price"] = price
+            print("✅ Inventory updated.")
+            return inventory
+
+    # New item
+    quantity = int(input("New item! Enter quantity: "))
+    price = float(input("Enter price per unit: "))
+    inventory.append({"name": name, "quantity": quantity, "price": price})
+    print("✅ New item added to inventory.")
+    return inventory
+
+
+def record_sale(inventory):
+    cart = []
+    print("\n🛒 Record a Sale (Enter 'done' to finish)")
+    while True:
+        name = input("Product name: ").strip()
+        if name.lower() == "done":
+            break
+        qty = int(input("Quantity sold: "))
+        for item in inventory:
+            if item["name"].lower() == name.lower():
+                if qty > item["quantity"]:
+                    print("❌ Not enough stock!")
+                else:
+                    item["quantity"] -= qty
+                    cart.append({"name": name, "qty": qty, "price": item["price"]})
+                break
+        else:
+            print("❌ Product not found!")
+
+    if cart:
+        total = sum(x["qty"] * x["price"] for x in cart)
+        print("\n🧾 Sale Summary:")
+        for item in cart:
+            print(f"- {item['name']}: {item['qty']} @ ${item['price']} = ${item['qty'] * item['price']:.2f}")
+        print(f"\n💰 Total Sale: ${total:.2f}")
+    else:
+        print("No items sold.")
+
+    return inventory
+
 
 def main():
-    print("📦 Inventory Summary Tool\n")
-    inventory = load_inventory()
-    display_inventory(inventory)
+    while True:
+        inventory = load_inventory()
+        print("\n📊 Inventory Summary Tool")
+        print("1. Modify Inventory")
+        print("2. Record Sale")
+        print("3. Show Inventory Status")
+        print("4. Exit")
+        choice = input("Choose an option: ").strip()
 
-    total_value = calculate_total_value(inventory)
-    print(f"💰 Total Inventory Value: ${total_value:.2f}")
+        if choice == "1":
+            inventory = modify_inventory(inventory)
+            save_inventory(inventory)
+        elif choice == "2":
+            inventory = record_sale(inventory)
+            save_inventory(inventory)
+        elif choice == "3":
+            display_inventory(inventory)
+        elif choice == "4":
+            print("👋 Exiting... Goodbye!")
+            break
+        else:
+            print("❌ Invalid option. Please try again.")
 
-    low_stock = get_low_stock_items(inventory)
-    if low_stock:
-        print("\n⚠️  Low Stock Items:")
-        display_inventory(low_stock)
-    else:
-        print("\n✅ No low-stock items.")
 
 if __name__ == "__main__":
     main()
