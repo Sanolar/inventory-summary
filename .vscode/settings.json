@@ -1,5 +1,7 @@
 {
-    "cSpell.words": [
-        "Pringles"
-    ]
+  "cSpell.words": [
+    "Chobani",
+    "Pringles"
+  ],
+  "python.analysis.extraPaths": ["./app"]
 }
