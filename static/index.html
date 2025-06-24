@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventory Summary Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      border-bottom: 1px solid #ccc;
+    }
+    table, th, td {
+      border: 1px solid #888;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+    #receipt {
+      background: #f4f4f4;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 20px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inventory Summary Tool</h1>
+
+  <!-- Inventory Display -->
+  <h2>Current Inventory</h2>
+  <button onclick="loadInventory()">Refresh Inventory</button>
+  <table id="inventoryTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Update Inventory -->
+  <h2>Update Inventory</h2>
+  <form id="updateForm">
+    <input type="text" id="updateName" placeholder="Product Name" required />
+    <input type="number" id="updateQuantity" placeholder="Quantity" required />
+    <input type="number" id="updatePrice" placeholder="Unit Price" required step="0.01" />
+    <button type="submit">Update/Add</button>
+  </form>
+
+  <!-- Record Sale -->
+  <h2>Record Sale</h2>
+  <form id="saleForm">
+    <input type="text" id="saleName" placeholder="Product Name" required />
+    <input type="number" id="saleQuantity" placeholder="Quantity" required />
+    <button type="submit">Sell</button>
+  </form>
+
+  <!-- Receipt -->
+  <div id="receipt" style="display: none;"></div>
+
+  <script>
+    async function loadInventory() {
+      const response = await fetch('/inventory-summary/');
+      const data = await response.json();
+      const tableBody = document.querySelector('#inventoryTable tbody');
+      tableBody.innerHTML = '';
+      data.forEach(item => {
+        const row = `<tr><td>${item.name}</td><td>${item.quantity}</td><td>$${item.price.toFixed(2)}</td></tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    document.getElementById('updateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const item = {
+        name: document.getElementById('updateName').value,
+        quantity: parseInt(document.getElementById('updateQuantity').value),
+        price: parseFloat(document.getElementById('updatePrice').value),
+      };
+      const response = await fetch('/inventory-summary/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item),
+      });
+      const result = await response.json();
+      alert(result.message || 'Item updated.');
+      loadInventory();
+    });
+
+    document.getElementById('saleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const sale = {
+        items: [{
+          name: document.getElementById('saleName').value,
+          quantity: parseInt(document.getElementById('saleQuantity').value),
+        }],
+      };
+      const response = await fetch('/inventory-summary/sale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sale),
+      });
+      const result = await response.json();
+      const now = new Date();
+      const receipt = document.getElementById('receipt');
+      receipt.innerHTML = `
+        <h3>Sales Receipt</h3>
+        <p><strong>Product:</strong> ${sale.items[0].name}</p>
+        <p><strong>Quantity:</strong> ${sale.items[0].quantity}</p>
+        <p><strong>Total:</strong> $${result.total_sale.toFixed(2)}</p>
+        <p><strong>Date:</strong> ${now.toLocaleDateString()}</p>
+        <p><strong>Time:</strong> ${now.toLocaleTimeString()}</p>
+        <p>Thank you for your purchase.</p>
+      `;
+      receipt.style.display = 'block';
+      loadInventory();
+    });
+
+    loadInventory(); // Initial load
+  </script>
+</body>
+</html>
